@@ -9,9 +9,10 @@ import {
 } from "lucide-react";
 
 import portfolio from "../assets/portfolio.png";
-import booknest from "../assets/booknest.png";
-import evora from "../assets/evora.png";
-import project_four from "../assets/project_four.png";
+import booknest from "../assets/projects/booknest.png";
+import karyab from '../assets/projects/karyab.png'
+import zan from '../assets/projects/zan.png'
+import goaltracker from '../assets/projects/goaltracker.png'
 
 // Custom GitHub SVG Icon
 function GithubIcon({ size = 21, className = "" }) {
@@ -37,12 +38,12 @@ function GithubIcon({ size = 21, className = "" }) {
 const projects = [
   {
     id: 1,
-    titleKey: "portfolioTitle",
+    titleKey: "Zan and Azadi",
     descriptionKey: "portfolioDescription",
-    image: portfolio,
+    image: zan,
     technologies: ["React", "Tailwind CSS", "Framer Motion"],
-    github: "https://github.com/YOUR_USERNAME/YOUR_REPOSITORY",
-    live: "https://your-portfolio.vercel.app",
+    github: "https://github.com/MaryamMirzada/Zan-Azadi",
+    live: "https://zan-five.vercel.app/login.html",
   },
   {
     id: 2,
@@ -50,26 +51,26 @@ const projects = [
     descriptionKey: "booknestDescription",
     image: booknest,
     technologies: ["React", "JavaScript", "CSS"],
-    github: "https://github.com/YOUR_USERNAME/BookNest",
-    live: "https://your-booknest.vercel.app",
+    github: "https://github.com/MaryamMirzada/BookNest",
+    live: "https://book-nest-seven-psi.vercel.app/",
   },
   {
     id: 3,
-    titleKey: "evoraTitle",
+    titleKey: "Goal Tracker App",
     descriptionKey: "evoraDescription",
-    image: evora,
+    image: goaltracker,
     technologies: ["React", "Tailwind CSS", "UI/UX"],
-    github: "https://github.com/YOUR_USERNAME/evora",
-    live: "https://your-evora.vercel.app",
+    github: "https://github.com/MaryamMirzada/Goal-tracker",
+    live: "https://goal-tracker-ecru.vercel.app/",
   },
   {
     id: 4,
-    titleKey: "projectFourTitle",
+    titleKey: "Karyab App",
     descriptionKey: "projectFourDescription",
-    image: project_four,
+    image: karyab,
     technologies: ["React", "JavaScript", "CSS"],
-    github: "https://github.com/YOUR_USERNAME/project-four",
-    live: "https://your-project-four.vercel.app",
+    github: "https://github.com/MaryamMirzada/KarYab-App/",
+    live: "https://portfolio-ochre-delta-89.vercel.app/",
   },
 ];
 
