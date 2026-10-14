@@ -1,17 +1,34 @@
+
 {
-    "nav": {
-        "home": "Home",
-        "about": "About",
-        "skills": "Skills",
-        "projects": "Projects",
-        "contact": "Contact"
-    },
-    "hero": {
-        "greeting": "Hi, I'm Maryam Mirzada.",
-        "role": "Front-End Developer & Digital Skills Trainer",
-        "description": "I build responsive and user-friendly websites.",
-        "button": "View My Projects"
-    }
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "skills": "Skills",
+    "projects": "Projects",
+    "contact": "Contact"
+  },
+  "hero": {
+    "greeting": "Hi, I'm Maryam Mirzada.",
+    "role": "Front-End Developer & Digital Skills Trainer",
+    "description": "I build responsive and user-friendly websites.",
+    "button": "View My Projects"
+  },
+  "projectsSubtitle": "MY RECENT WORK",
+  "projectsHeading": "Featured",
+  "projectsHighlight": "Projects",
+  "projectsDescription": "Explore some of my projects where I combine creativity, technology, and user-focused design to build modern web experiences.",
+  "projectsCount": "Total projects: {{count}}",
+  "previousProjects": "Previous projects",
+  "nextProjects": "Next projects",
+  "portfolioTitle": "Portfolio Website",
+  "portfolioDescription": "A personal website showcasing my skills, experience, and projects.",
+  "booknestTitle": "BookNest",
+  "booknestDescription": "An online bookstore that helps readers discover their next favorite book.",
+  "evoraTitle": "Evora Brand",
+  "evoraDescription": "A stylish online storefront concept for handmade clothing and fashion products.",
+  "projectFourTitle": "Project Four",
+  "projectFourDescription": "A responsive web experience focused on usability and user-friendly design.",
+  "sourceCode": "Source Code",
+  "liveDemo": "Live Demo",
+  "carouselHint": "Use the arrows or swipe horizontally to explore more projects."
 }
-
-
