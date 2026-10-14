@@ -1,0 +1,15 @@
+{
+    "nav": {
+        "home": "Home",
+        "about": "About",
+        "skills": "Skills",
+        "projects": "Projects",
+        "contact": "Contact"
+    },
+    "hero": {
+        "greeting": "Hi, I'm Maryam Mirzada.",
+        "role": "Front-End Developer & Digital Skills Trainer",
+        "description": "I build responsive and user-friendly websites.",
+        "button": "View My Projects"
+    }
+}
