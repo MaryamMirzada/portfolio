@@ -1,13 +1,20 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Languages, ChevronDown, Check } from "lucide-react";
 
 export default function Navbar() {
   const { t, i18n } = useTranslation();
+  const [languageOpen, setLanguageOpen] = useState(false);
+
+  const currentLanguage = i18n.language.startsWith("fa") ? "fa" : "en";
 
   const changeLanguage = async (language) => {
     await i18n.changeLanguage(language);
 
     document.documentElement.lang = language;
     document.documentElement.dir = language === "fa" ? "rtl" : "ltr";
+
+    setLanguageOpen(false);
   };
 
   const links = [
@@ -30,44 +37,71 @@ export default function Navbar() {
         </a>
 
         {/* Navigation */}
-        <div className="hidden items-center gap-10 md:flex">
+        <div className="hidden items-center gap-14 md:flex">
           {links.map((link) => (
             <a
               key={link.href}
               href={link.href}
-              className="text-base font-bold text-foreground transition-all duration-300 hover:text-accent-light"
+              className="text-base font-bold text-foreground transition-colors duration-300 hover:text-accent-light"
             >
               {link.label}
             </a>
           ))}
 
-          {/* Language switcher */}
-          <div className="flex items-center gap-1 rounded-button border border-border p-1">
+          {/* Language Icon */}
+
+          {/* Language Icon */}
+          <div className="relative">
             <button
               type="button"
-              onClick={() => changeLanguage("en")}
-              aria-pressed={i18n.language === "en"}
-              className={`rounded-lg px-4 py-2 text-sm font-bold transition-all duration-300 hover:text-accent-light ${
-                i18n.language === "en"
-                  ? "bg-primary text-foreground"
-                  : "text-muted"
-              }`}
+              onClick={() => setLanguageOpen((open) => !open)}
+              aria-label={t("nav.changeLanguage", "Change language")}
+              aria-expanded={languageOpen}
+              className="group flex items-center gap-2 rounded-xl border border-primary/50 bg-primary/15 px-3.5 py-2.5 text-accent-light shadow-[0_0_15px_rgba(124,58,237,0.08)] transition-all duration-300 hover:border-accent hover:bg-primary/30 hover:shadow-[0_0_18px_rgba(124,58,237,0.2)] active:scale-95"
             >
-              EN
+              <Languages
+                size={21}
+                strokeWidth={1.8}
+                className="transition-transform duration-300 group-hover:rotate-6"
+              />
+
+              <span className="text-sm font-semibold">
+                {currentLanguage === "en" ? "EN" : "دری"}
+              </span>
+
+              <ChevronDown
+                size={14}
+                className={`transition-transform duration-300 ${
+                  languageOpen ? "rotate-180" : ""
+                }`}
+              />
             </button>
 
-            <button
-              type="button"
-              onClick={() => changeLanguage("fa")}
-              aria-pressed={i18n.language === "fa"}
-              className={`rounded-lg px-4 py-2 text-sm font-bold transition-all duration-300 hover:text-accent-light ${
-                i18n.language === "fa"
-                  ? "bg-primary text-foreground"
-                  : "text-muted"
-              }`}
-            >
-              دری
-            </button>
+            {languageOpen && (
+              <div className="absolute right-0 top-full z-50 mt-3 w-40 overflow-hidden rounded-xl border border-border bg-surface p-1.5 shadow-xl">
+                <button
+                  type="button"
+                  onClick={() => changeLanguage("en")}
+                  className="flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-primary/20 hover:text-accent-light"
+                >
+                  <span>English</span>
+                  {currentLanguage === "en" && (
+                    <Check size={16} className="text-accent-light" />
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => changeLanguage("fa")}
+                  className="flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-primary/20 hover:text-accent-light"
+                >
+                  <span>دری</span>
+                  {currentLanguage === "fa" && (
+                    <Check size={16} className="text-accent-light" />
+                  )}
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </nav>
