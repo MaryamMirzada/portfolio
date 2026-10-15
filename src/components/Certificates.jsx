@@ -1,10 +1,11 @@
-
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import aspire from '../assets/certificate/aspire.png'
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+import aspire from "../assets/certificate/aspire.png";
 import web from "../assets/certificate/web.png";
 import Ai from "../assets/certificate/Ai.png";
-
 
 import {
   Award,
@@ -13,8 +14,9 @@ import {
   GraduationCap,
   Code2,
   BrainCircuit,
-  BriefcaseBusiness,
 } from "lucide-react";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const certificates = [
   {
@@ -53,6 +55,10 @@ export default function Certificates() {
   const [failedImages, setFailedImages] = useState({});
   const [activeFilter, setActiveFilter] = useState("all");
 
+  const sectionRef = useRef(null);
+  const modalRef = useRef(null);
+  const modalContentRef = useRef(null);
+
   const isPersian = ["fs", "fa", "ps", "dr"].includes(
     i18n.language?.split("-")[0]
   );
@@ -71,6 +77,171 @@ export default function Certificates() {
           (certificate) => certificate.category === activeFilter
         );
 
+  // -----------------------------------------
+  // 1. Section heading and filter animations
+  // -----------------------------------------
+  useEffect(() => {
+    const section = sectionRef.current;
+
+    if (!section) return;
+
+    const ctx = gsap.context(() => {
+      // Main heading
+      gsap.fromTo(
+        ".cert-heading-content",
+        {
+          autoAlpha: 0,
+          y: 35,
+        },
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.9,
+          stagger: 0.12,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: ".cert-heading",
+            start: "top 85%",
+            toggleActions: "play none play reverse",
+          },
+        }
+      );
+
+      // Certificate count
+      gsap.fromTo(
+        ".cert-count",
+        {
+          autoAlpha: 0,
+          scale: 0.85,
+          y: 20,
+        },
+        {
+          autoAlpha: 1,
+          scale: 1,
+          y: 0,
+          duration: 0.7,
+          ease: "back.out(1.5)",
+          scrollTrigger: {
+            trigger: ".cert-heading",
+            start: "top 85%",
+            toggleActions: "play none play reverse",
+          },
+        }
+      );
+
+      // Category filters
+      gsap.fromTo(
+        ".cert-filter",
+        {
+          autoAlpha: 0,
+          y: 18,
+        },
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.5,
+          stagger: 0.08,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: ".cert-filters",
+            start: "top 90%",
+            toggleActions: "play none play reverse",
+          },
+        }
+      );
+    }, section);
+
+    return () => ctx.revert();
+  }, []);
+
+  // -----------------------------------------
+  // 2. Card animations on scroll
+  // Re-run when the category filter changes
+  // -----------------------------------------
+  useEffect(() => {
+    const section = sectionRef.current;
+
+    if (!section) return;
+
+    const ctx = gsap.context(() => {
+      const cards = gsap.utils.toArray(".cert-card");
+
+      cards.forEach((card, index) => {
+        gsap.fromTo(
+          card,
+          {
+            autoAlpha: 0,
+            y: 45,
+            scale: 0.96,
+          },
+          {
+            autoAlpha: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.75,
+            delay: index * 0.12,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: card,
+              start: "top 90%",
+              toggleActions: "play none play reverse",
+            },
+          }
+        );
+      });
+
+      ScrollTrigger.refresh();
+    }, section);
+
+    return () => ctx.revert();
+  }, [activeFilter]);
+
+  // -----------------------------------------
+  // 3. Certificate modal opening animation
+  // -----------------------------------------
+  useEffect(() => {
+    if (!selectedCertificate) return;
+
+    const overlay = modalRef.current;
+    const content = modalContentRef.current;
+
+    if (!overlay || !content) return;
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        overlay,
+        { autoAlpha: 0 },
+        {
+          autoAlpha: 1,
+          duration: 0.25,
+          ease: "power2.out",
+        }
+      );
+
+      gsap.fromTo(
+        content,
+        {
+          autoAlpha: 0,
+          y: 30,
+          scale: 0.96,
+        },
+        {
+          autoAlpha: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.45,
+          ease: "power3.out",
+          delay: 0.05,
+        }
+      );
+    });
+
+    return () => ctx.revert();
+  }, [selectedCertificate]);
+
+  // -----------------------------------------
+  // Certificate image preview
+  // -----------------------------------------
   const renderCertificatePreview = (certificate) => {
     const Icon = certificate.icon;
     const imageFailed = failedImages[certificate.id];
@@ -123,6 +294,7 @@ export default function Certificates() {
 
   return (
     <section
+      ref={sectionRef}
       id="certificates"
       dir={isPersian ? "rtl" : "ltr"}
       className="relative overflow-hidden bg-black px-5 py-24 text-white sm:px-8 lg:px-16"
@@ -134,9 +306,9 @@ export default function Certificates() {
 
       <div className="relative mx-auto max-w-7xl">
         {/* Section heading */}
-        <div className="mb-12 flex flex-col justify-between gap-6 md:flex-row md:items-end">
+        <div className="cert-heading mb-12 flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div>
-            <div className="mb-4 flex items-center gap-3">
+            <div className="cert-heading-content mb-4 flex items-center gap-3">
               <span className="h-px w-10 bg-purple-400" />
 
               <p className="text-xs font-semibold tracking-[0.28em] text-purple-300 sm:text-sm">
@@ -144,20 +316,20 @@ export default function Certificates() {
               </p>
             </div>
 
-            <h2 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
+            <h2 className="cert-heading-content text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
               {t("certificatesHeading")}{" "}
               <span className="text-purple-400">
                 {t("certificatesHighlight")}
               </span>
             </h2>
 
-            <p className="mt-5 max-w-xl leading-7 text-gray-400">
+            <p className="cert-heading-content mt-5 max-w-xl leading-7 text-gray-400">
               {t("certificatesDescription")}
             </p>
           </div>
 
           {/* Certificate count */}
-          <div className="flex w-fit items-center gap-3 rounded-2xl border border-purple-400/20 bg-[#100B18] px-5 py-4">
+          <div className="cert-count flex w-fit items-center gap-3 rounded-2xl border border-purple-400/20 bg-[#100B18] px-5 py-4">
             <Award size={27} className="text-purple-300" />
 
             <div>
@@ -173,13 +345,14 @@ export default function Certificates() {
         </div>
 
         {/* Category filters */}
-        <div className="mb-10 flex flex-wrap gap-3">
+        <div className="cert-filters mb-10 flex flex-wrap gap-3">
           {filters.map((filter) => (
             <button
               key={filter.key}
               type="button"
               onClick={() => setActiveFilter(filter.key)}
-              className={`rounded-full border px-4 py-2 text-sm transition-all duration-300 ${
+              aria-pressed={activeFilter === filter.key}
+              className={`cert-filter rounded-full border px-4 py-2 text-sm transition-all duration-300 ${
                 activeFilter === filter.key
                   ? "border-purple-400 bg-purple-500/15 text-purple-200 shadow-[0_0_20px_rgba(139,92,246,0.12)]"
                   : "border-white/10 bg-white/[0.02] text-gray-400 hover:border-purple-400/50 hover:text-white"
@@ -190,17 +363,15 @@ export default function Certificates() {
           ))}
         </div>
 
-        {/* Equal certificate cards */}
+        {/* Certificate cards */}
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {filteredCertificates.map((certificate, index) => (
             <button
               key={certificate.id}
               type="button"
               onClick={() => setSelectedCertificate(certificate)}
-              aria-label={`${t("viewCertificate")}: ${t(
-                certificate.titleKey
-              )}`}
-              className="group relative overflow-hidden rounded-2xl border border-white/10 bg-[#0B0A0F] p-3 text-start transition-all duration-300 hover:-translate-y-1 hover:border-purple-400/50 hover:shadow-[0_12px_40px_rgba(91,32,201,0.12)]"
+              aria-label={`${t("viewCertificate")}: ${t(certificate.titleKey)}`}
+              className="cert-card group relative overflow-hidden rounded-2xl border border-white/10 bg-[#0B0A0F] p-3 text-start transition-[border-color,box-shadow] duration-300 hover:border-purple-400/50 hover:shadow-[0_12px_40px_rgba(91,32,201,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400"
             >
               <div className="mb-4">
                 {renderCertificatePreview(certificate)}
@@ -209,8 +380,7 @@ export default function Certificates() {
               <div className="flex items-start justify-between gap-3 px-2 pb-3">
                 <div className="min-w-0">
                   <p className="mb-2 text-xs text-purple-300">
-                    {certificate.year} /{" "}
-                    {String(index + 1).padStart(2, "0")}
+                    {certificate.year} / {String(index + 1).padStart(2, "0")}
                   </p>
 
                   <h3 className="text-base font-semibold leading-6 text-white transition-colors group-hover:text-purple-200">
@@ -241,16 +411,18 @@ export default function Certificates() {
       {/* Certificate preview modal */}
       {selectedCertificate && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4 backdrop-blur-md"
+          ref={modalRef}
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4 opacity-0 backdrop-blur-md"
           onClick={() => setSelectedCertificate(null)}
           role="presentation"
         >
           <div
+            ref={modalContentRef}
             role="dialog"
             aria-modal="true"
             aria-label={t(selectedCertificate.titleKey)}
             onClick={(event) => event.stopPropagation()}
-            className="relative max-h-[92vh] w-full max-w-5xl overflow-auto rounded-2xl border border-purple-400/30 bg-[#0C0911] p-4 shadow-[0_0_70px_rgba(91,32,201,0.15)] sm:p-6"
+            className="relative max-h-[92vh] w-full max-w-5xl overflow-auto rounded-2xl border border-purple-400/30 bg-[#0C0911] p-4 opacity-0 shadow-[0_0_70px_rgba(91,32,201,0.15)] sm:p-6"
           >
             {/* Modal header */}
             <div className="mb-4 flex items-start justify-between gap-4">

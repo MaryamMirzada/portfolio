@@ -1,4 +1,7 @@
+import { useTranslation } from "react-i18next";
+
 export default function Footer() {
+  const { t } = useTranslation();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -20,17 +23,17 @@ export default function Footer() {
           {/* Copyright */}
           <p className="text-center text-xs leading-6 text-gray-500 sm:text-sm">
             © {currentYear}{" "}
-            <span className="font-medium text-gray-300">Maryam Mirzada</span>.
-            All rights reserved.
+            <span className="font-medium text-gray-300">Maryam Mirzada</span>.{" "}
+            {t("footerRights")}
           </p>
 
           {/* Back to top */}
           <a
             href="#home"
-            aria-label="Back to top"
+            aria-label={t("footerBackToTop")}
             className="group inline-flex items-center gap-2 text-sm font-medium text-gray-400 transition-colors duration-300 hover:text-purple-400"
           >
-            <span>Back to top</span>
+            <span>{t("footerBackToTop")}</span>
             <span
               aria-hidden="true"
               className="text-lg transition-transform duration-300 group-hover:-translate-y-1"

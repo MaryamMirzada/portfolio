@@ -1,5 +1,5 @@
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import {
   ExternalLink,
@@ -13,6 +13,8 @@ import booknest from "../assets/projects/booknest.png";
 import karyab from '../assets/projects/karyab.png'
 import zan from '../assets/projects/zan.png'
 import goaltracker from '../assets/projects/goaltracker.png'
+import youthx from "../assets/projects/youthx.png";
+
 
 // Custom GitHub SVG Icon
 function GithubIcon({ size = 21, className = "" }) {
@@ -37,6 +39,15 @@ function GithubIcon({ size = 21, className = "" }) {
 
 const projects = [
   {
+    id: 5,
+    titleKey: "YouthX Afghan Community",
+    descriptionKey: "youthXMarketingDescription",
+    image: youthx, // عکس پروژه مارکیتنگ خودت را اینجا وارد کن
+    technologies: ["Digital Marketing", "Social Media", "Content Strategy"],
+    github: "https://www.behance.net/maryammirzada",
+    live: "https://www.behance.net/gallery/257136315/YouthX-Afghan-Community",
+  },
+  {
     id: 1,
     titleKey: "Zan and Azadi",
     descriptionKey: "portfolioDescription",
@@ -44,15 +55,6 @@ const projects = [
     technologies: ["React", "Tailwind CSS", "Framer Motion"],
     github: "https://github.com/MaryamMirzada/Zan-Azadi",
     live: "https://zan-five.vercel.app/login.html",
-  },
-  {
-    id: 2,
-    titleKey: "booknestTitle",
-    descriptionKey: "booknestDescription",
-    image: booknest,
-    technologies: ["React", "JavaScript", "CSS"],
-    github: "https://github.com/MaryamMirzada/BookNest",
-    live: "https://book-nest-seven-psi.vercel.app/",
   },
   {
     id: 3,
@@ -71,6 +73,15 @@ const projects = [
     technologies: ["React", "JavaScript", "CSS"],
     github: "https://github.com/MaryamMirzada/KarYab-App/",
     live: "https://portfolio-ochre-delta-89.vercel.app/",
+  },
+  {
+    id: 2,
+    titleKey: "booknestTitle",
+    descriptionKey: "booknestDescription",
+    image: booknest,
+    technologies: ["React", "JavaScript", "CSS"],
+    github: "https://github.com/MaryamMirzada/BookNest",
+    live: "https://book-nest-seven-psi.vercel.app/",
   },
 ];
 
@@ -92,6 +103,29 @@ export default function Projects() {
     });
   };
 
+
+  useEffect(() => {
+    const cards = document.querySelectorAll(".project-card");
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+          } else {
+            entry.target.classList.remove("is-visible");
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    cards.forEach((card) => observer.observe(card));
+
+    return () => observer.disconnect();
+  }, []);
+
+
   return (
     <section
       id="projects"
@@ -110,9 +144,7 @@ export default function Projects() {
 
           <h2 className="text-3xl font-bold sm:text-4xl md:text-5xl">
             {t("projectsHeading")}{" "}
-            <span className="text-purple-500">
-              {t("projectsHighlight")}
-            </span>
+            <span className="text-purple-500">{t("projectsHighlight")}</span>
           </h2>
 
           <div className="mx-auto mt-5 h-1 w-20 rounded-full bg-purple-600" />
@@ -167,15 +199,20 @@ export default function Projects() {
             <article
               key={project.id}
               dir={isPersian ? "rtl" : "ltr"}
-              className="group w-[85%] min-w-[85%] snap-start overflow-hidden rounded-2xl border border-white/10 bg-[#0b0b0f] transition-all duration-500 hover:-translate-y-2 hover:border-purple-500/60 hover:shadow-[0_0_30px_rgba(124,58,237,0.15)] sm:w-[calc(50%-12px)] sm:min-w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] lg:min-w-[calc(33.333%-16px)]"
+              className="project-card group w-[85%] min-w-[85%] snap-start overflow-hidden rounded-2xl border border-white/10 bg-[#0b0b0f] transition-all duration-500 hover:-translate-y-2 hover:border-purple-500/60 hover:shadow-[0_0_30px_rgba(124,58,237,0.15)] sm:w-[calc(50%-12px)] sm:min-w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] lg:min-w-[calc(33.333%-16px)]"
             >
               {/* Project Image */}
+
               <div className="relative aspect-[16/10] overflow-hidden bg-[#111116]">
+                {/* Project Image: Opens Live Demo */}
                 <a
-                  href={project.live}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href={project.live || "#"}
+                  target={project.live ? "_blank" : undefined}
+                  rel={project.live ? "noopener noreferrer" : undefined}
                   aria-label={`${t(project.titleKey)} - ${t("liveDemo")}`}
+                  onClick={(e) => {
+                    if (!project.live) e.preventDefault();
+                  }}
                   className="block h-full w-full"
                 >
                   <img
@@ -194,16 +231,26 @@ export default function Projects() {
                   {String(index + 1).padStart(2, "0")}
                 </span>
 
-                {/* GitHub Icon */}
-                <a
-                  href={project.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`${t(project.titleKey)} - GitHub`}
-                  className="absolute right-4 top-4 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-black/70 text-white backdrop-blur-md transition-all duration-300 hover:scale-110 hover:border-purple-400 hover:bg-purple-600"
-                >
-                  <GithubIcon size={21} />
-                </a>
+                {/* Project Link Icon: GitHub or Behance */}
+                {project.github && (
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${t(project.titleKey)} - ${
+                      project.titleKey === "marketingProject"
+                        ? "Behance"
+                        : "GitHub"
+                    }`}
+                    className="absolute right-4 top-4 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-black/70 text-white backdrop-blur-md transition-all duration-300 hover:scale-110 hover:border-purple-400 hover:bg-purple-600"
+                  >
+                    {project.titleKey === "marketingProject" ? (
+                      <span className="text-sm font-extrabold">Bē</span>
+                    ) : (
+                      <GithubIcon size={21} />
+                    )}
+                  </a>
+                )}
               </div>
 
               {/* Project Details */}
