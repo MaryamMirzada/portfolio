@@ -23,8 +23,10 @@ export default function Footer() {
           {/* Copyright */}
           <p className="text-center text-xs leading-6 text-gray-500 sm:text-sm">
             © {currentYear}{" "}
-            <span className="font-medium text-gray-300">Maryam Mirzada</span>.{" "}
-            {t("footerRights")}
+            <span className="font-medium text-gray-300">
+              Maryam Mirzada
+            </span>
+            . {t("footerRights")}
           </p>
 
           {/* Back to top */}
@@ -43,8 +45,18 @@ export default function Footer() {
           </a>
         </div>
 
-        {/* Subtle bottom accent */}
-        <div className="mt-6 h-px w-full bg-gradient-to-r from-transparent via-purple-500/20 to-transparent" />
+        {/* Designed by */}
+        <div className="mt-1 text-center">
+          <p className="text-[10px] leading-4 text-gray-500">
+            Designed by{" "}
+            <span className="font-medium text-purple-400">
+              Maryam Mirzada
+            </span>
+          </p>
+        </div>
+
+        {/* Bottom Accent */}
+        <div className="mt-6 h-px w-full bg-gradient-to-r from-transparent via-purple-500/30 to-transparent" />
       </div>
     </footer>
   );

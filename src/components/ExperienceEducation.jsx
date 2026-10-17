@@ -14,46 +14,110 @@ gsap.registerPlugin(ScrollTrigger);
 const workExperience = [
   {
     id: 1,
-    titleKey: "expArshTitle",
-    organizationKey: "expArshOrganization",
-    dateKey: "expArshDate",
-    descriptionKey: "expArshDescription",
+    titleKey: "expYouthXTitle",
+    organizationKey: "expYouthXOrganization",
+    dateKey: "expYouthXDate",
+    descriptionKey: "expYouthXDescription",
   },
   {
     id: 2,
-    titleKey: "expCtiTitle",
-    organizationKey: "expCtiOrganization",
-    dateKey: "expCtiDate",
-    descriptionKey: "expCtiDescription",
+    titleKey: "expYELTitle",
+    organizationKey: "expYELOOrganization",
+    dateKey: "expYELDate",
+    descriptionKey: "expYELDescription",
   },
   {
     id: 3,
-    titleKey: "expAdaTitle",
-    organizationKey: "expAdaOrganization",
-    dateKey: "expAdaDate",
-    descriptionKey: "expAdaDescription",
+    titleKey: "expMindITitle",
+    organizationKey: "expMindIOrganization",
+    dateKey: "expMindIDate",
+    descriptionKey: "expMindIDescription",
+  },
+  {
+    id: 4,
+    titleKey: "expCTITitle",
+    organizationKey: "expCTIOrganization",
+    dateKey: "expCTIDate",
+    descriptionKey: "expCTIDescription",
+  },
+  {
+    id: 5,
+    titleKey: "expResearchTitle",
+    organizationKey: "expResearchOrganization",
+    dateKey: "expResearchDate",
+    descriptionKey: "expResearchDescription",
+  },
+  {
+    id: 6,
+    titleKey: "expKatebTitle",
+    organizationKey: "expKatebOrganization",
+    dateKey: "expKatebDate",
+    descriptionKey: "expKatebDescription",
+  },
+  {
+    id: 7,
+    titleKey: "expFutureBuildersTitle",
+    organizationKey: "expFutureBuildersOrganization",
+    dateKey: "expFutureBuildersDate",
+    descriptionKey: "expFutureBuildersDescription",
+  },
+  {
+    id: 8,
+    titleKey: "expLHLTitle",
+    organizationKey: "expLHLOrganization",
+    dateKey: "expLHLDate",
+    descriptionKey: "expLHLDescription",
   },
 ];
 
 const education = [
   {
     id: 1,
-    titleKey: "eduFrontendTitle",
-    organizationKey: "eduFrontendOrganization",
-    descriptionKey: "eduFrontendDescription",
+    titleKey: "eduUoPeopleTitle",
+    organizationKey: "eduUoPeopleOrganization",
+    descriptionKey: "eduUoPeopleDescription",
   },
   {
     id: 2,
-    titleKey: "eduMarketingTitle",
-    organizationKey: "eduMarketingOrganization",
-    descriptionKey: "eduMarketingDescription",
-    link: "https://www.linkedin.com/company/hbc-company/",
+    titleKey: "eduMidwiferyTitle",
+    organizationKey: "eduMidwiferyOrganization",
+    descriptionKey: "eduMidwiferyDescription",
   },
   {
     id: 3,
-    titleKey: "eduLeadershipTitle",
-    organizationKey: "eduLeadershipOrganization",
-    descriptionKey: "eduLeadershipDescription",
+    titleKey: "eduCTIFullStackTitle",
+    organizationKey: "eduCTIFullStackOrganization",
+    descriptionKey: "eduCTIFullStackDescription",
+  },
+  {
+    id: 4,
+    titleKey: "eduAspireTitle",
+    organizationKey: "eduAspireOrganization",
+    descriptionKey: "eduAspireDescription",
+  },
+  {
+    id: 5,
+    titleKey: "eduAITrainingTitle",
+    organizationKey: "eduAITrainingOrganization",
+    descriptionKey: "eduAITrainingDescription",
+  },
+  {
+    id: 6,
+    titleKey: "eduCS50Title",
+    organizationKey: "eduCS50Organization",
+    descriptionKey: "eduCS50Description",
+  },
+  {
+    id: 7,
+    titleKey: "eduAELSOTitle",
+    organizationKey: "eduAELSOOrganization",
+    descriptionKey: "eduAELSODescription",
+  },
+  {
+    id: 8,
+    titleKey: "eduOMLASTitle",
+    organizationKey: "eduOMLASOrganization",
+    descriptionKey: "eduOMLASDescription",
   },
 ];
 
@@ -68,7 +132,7 @@ function TimelineItem({ item, t, isEducation = false }) {
 
       {/* Card */}
       <div className="relative overflow-hidden rounded-xl border border-white/10 bg-[#0b0b0f] p-5 transition-all duration-300 hover:-translate-y-1 hover:border-purple-500/50 hover:shadow-[0_0_24px_rgba(124,58,237,0.15)] sm:p-6">
-        {/* Subtle purple glow */}
+        {/* Purple Glow */}
         <div className="pointer-events-none absolute -right-12 -top-12 h-28 w-28 rounded-full bg-purple-600/0 blur-3xl transition-colors duration-500 group-hover:bg-purple-600/15" />
 
         <div className="relative">
@@ -92,7 +156,7 @@ function TimelineItem({ item, t, isEducation = false }) {
             </p>
           )}
 
-          {!isEducation && (
+          {!isEducation && item.dateKey && (
             <div className="mt-3 flex items-center gap-2 text-xs text-gray-500">
               <CalendarDays size={14} />
               <span>{t(item.dateKey)}</span>
@@ -112,23 +176,18 @@ export default function ExperienceEducation() {
   const { t, i18n } = useTranslation();
   const sectionRef = useRef(null);
 
-  const isPersian = ["fs", "fa", "ps", "dr"].includes(
+  const isPersian = ["fa", "ps", "dr", "prs"].includes(
     i18n.language?.split("-")[0]
   );
 
   useEffect(() => {
     const section = sectionRef.current;
-
     if (!section) return;
 
     const ctx = gsap.context(() => {
-      // Section heading animation
       gsap.fromTo(
         ".experience-section-heading",
-        {
-          autoAlpha: 0,
-          y: 35,
-        },
+        { autoAlpha: 0, y: 35 },
         {
           autoAlpha: 1,
           y: 0,
@@ -142,13 +201,9 @@ export default function ExperienceEducation() {
         }
       );
 
-      // Column heading animation
       gsap.fromTo(
         ".experience-column-heading",
-        {
-          autoAlpha: 0,
-          y: 25,
-        },
+        { autoAlpha: 0, y: 25 },
         {
           autoAlpha: 1,
           y: 0,
@@ -163,7 +218,6 @@ export default function ExperienceEducation() {
         }
       );
 
-      // Cards enter from opposite directions
       const cards = gsap.utils.toArray(".experience-timeline-card", section);
 
       cards.forEach((card) => {
@@ -173,18 +227,18 @@ export default function ExperienceEducation() {
           card,
           {
             autoAlpha: 0,
-            x: direction * 70,
-            y: 24,
+            x: direction * 45,
+            y: 20,
           },
           {
             autoAlpha: 1,
             x: 0,
             y: 0,
-            duration: 0.85,
+            duration: 0.75,
             ease: "power3.out",
             scrollTrigger: {
               trigger: card,
-              start: "top 88%",
+              start: "top 90%",
               toggleActions: "play none play reverse",
             },
           }
@@ -192,9 +246,7 @@ export default function ExperienceEducation() {
       });
     }, section);
 
-    return () => {
-      ctx.revert();
-    };
+    return () => ctx.revert();
   }, []);
 
   return (
@@ -230,7 +282,7 @@ export default function ExperienceEducation() {
 
         {/* Two Columns */}
         <div className="experience-columns grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-10">
-          {/* Work Experience — Left */}
+          {/* Work Experience */}
           <div>
             <div className="experience-column-heading mb-8 flex items-center gap-4">
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-purple-500/30 bg-purple-500/10 text-purple-400">
@@ -254,7 +306,7 @@ export default function ExperienceEducation() {
             </div>
           </div>
 
-          {/* Education — Right */}
+          {/* Education & Professional Development */}
           <div>
             <div className="experience-column-heading mb-8 flex items-center gap-4">
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-purple-500/30 bg-purple-500/10 text-purple-400">
